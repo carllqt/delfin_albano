@@ -4,18 +4,34 @@ import React, { useRef, useState } from "react";
 import { router, usePage } from "@inertiajs/react";
 import PageLayout from "@/Layouts/PageLayout";
 import CandidateGrid from "./Partials/CandidateGrid";
+import CriteriaScoreModal from "./Partials/CriteriaScoreModal";
 import ScoreAlertDialog from "./Partials/ScoreAlertDialog";
 import { toast } from "sonner";
+import { categoryCriteria } from "@/config/categoryCriteria";
 
 const Swimwear = ({ candidates }) => {
     const judgeId = usePage().props.auth.user.id;
     const scoresRef = useRef({});
+    const criteriaScoresRef = useRef({});
 
     const [_, setRerender] = useState(0);
     const [submitted, setSubmitted] = useState(false);
+    const [selectedCandidate, setSelectedCandidate] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleScoreChange = (candidateId, score) => {
-        scoresRef.current = { ...scoresRef.current, [candidateId]: score };
+    const criteria = categoryCriteria.swim_wear;
+
+    const handleCandidateClick = (candidate) => {
+        setSelectedCandidate(candidate);
+        setIsModalOpen(true);
+    };
+
+    const handleCriteriaSubmit = (candidateId, criteriaScores, totalScore) => {
+        scoresRef.current = { ...scoresRef.current, [candidateId]: totalScore };
+        criteriaScoresRef.current = {
+            ...criteriaScoresRef.current,
+            [candidateId]: criteriaScores,
+        };
         setRerender((r) => r + 1);
     };
 
@@ -47,6 +63,7 @@ const Swimwear = ({ candidates }) => {
             {
                 judge_id: judgeId,
                 scores: filteredScores,
+                criteria_scores: criteriaScoresRef.current,
             },
             {
                 onSuccess: () => {
@@ -68,13 +85,29 @@ const Swimwear = ({ candidates }) => {
                     <h2 className="text-2xl font-bold text-neutral-200 text-center mb-6">
                         Swim Wear
                     </h2>
+                    <p className="text-sm text-gray-400">
+                        Click on each candidate to score based on criteria
+                    </p>
                 </div>
+
                 <CandidateGrid
                     candidates={candidates}
-                    maxScore={100}
                     scoresRef={scoresRef}
-                    onScoreChange={handleScoreChange}
+                    onCandidateClick={handleCandidateClick}
                     submitted={submitted}
+                />
+
+                <CriteriaScoreModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    candidate={selectedCandidate}
+                    criteria={criteria}
+                    onSubmit={handleCriteriaSubmit}
+                    existingScores={
+                        selectedCandidate
+                            ? criteriaScoresRef.current[selectedCandidate.id]
+                            : {}
+                    }
                 />
 
                 <ScoreAlertDialog

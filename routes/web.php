@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/swim-wear', [CandidateController::class, 'swim_wear'])
         ->name('swim_wear');
 
-    Route::get('/filipiniana-attire', [CandidateController::class, 'filipiniana_attire'])
+    Route::get('/evening-long-gown', [CandidateController::class, 'filipiniana_attire'])
         ->name('filipiniana_attire');
 
     Route::get('/beauty-of-face-aura', [CandidateController::class, 'beauty_of_face_aura'])
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/swim-wear/scores', [TopFiveSelectionScoreController::class, 'swim_wear_store'])
         ->name('swim_wear.store');
 
-    Route::post('/filipiniana-attire/scores', [TopFiveSelectionScoreController::class, 'filipiniana_attire_store'])
+    Route::post('/evening-long-gown/scores', [TopFiveSelectionScoreController::class, 'filipiniana_attire_store'])
         ->name('filipiniana_attire.store');
 
     Route::post('/beauty-of-face-aura/scores', [TopFiveSelectionScoreController::class, 'beauty_of_face_aura_store'])
@@ -86,7 +86,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/swim-wear', [TopFiveSelectionResultController::class, 'swimWearResults'])
         ->name('admin.swim_wear');
 
-    Route::get('/admin/filipiniana-attire', [TopFiveSelectionResultController::class, 'filipinianaAttireResults'])
+    Route::get('/admin/evening-long-gown', [TopFiveSelectionResultController::class, 'filipinianaAttireResults'])
         ->name('admin.filipiniana_attire');
 
     Route::get('/admin/beauty-of-face-aura', [TopFiveSelectionResultController::class, 'beautyOfFaceAuraResults'])

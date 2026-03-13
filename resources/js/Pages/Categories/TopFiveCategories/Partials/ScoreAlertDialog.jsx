@@ -43,7 +43,7 @@ const ScoreAlertDialog = ({
                 </HoverBorderGradient>
             </AlertDialogTrigger>
 
-            <AlertDialogContent className="sm:max-w-lg max-h-[75vh] bg-neutral-900 text-white rounded-lg shadow-lg p-6 overflow-auto">
+            <AlertDialogContent className="sm:max-w-lg max-h-[85vh] bg-neutral-900 text-white rounded-lg shadow-lg p-6 flex flex-col">
                 <AlertDialogHeader>
                     <AlertDialogTitle>Verify Scores</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -51,7 +51,7 @@ const ScoreAlertDialog = ({
                     </AlertDialogDescription>
                 </AlertDialogHeader>
 
-                <div className="mt-4">
+                <div className="mt-4 overflow-y-auto flex-1 max-h-[50vh]">
                     <table className="w-full text-left border-collapse border border-gray-700">
                         <thead className="bg-neutral-800 text-white">
                             <tr>
@@ -67,7 +67,15 @@ const ScoreAlertDialog = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {candidates.map((c) => {
+                            {[...candidates]
+                                .sort((a, b) => {
+                                    const keyA = a.candidate_id || a.id;
+                                    const keyB = b.candidate_id || b.id;
+                                    const scoreA = scores[keyA] ?? a[categoryField] ?? 0;
+                                    const scoreB = scores[keyB] ?? b[categoryField] ?? 0;
+                                    return scoreB - scoreA;
+                                })
+                                .map((c, idx) => {
                                 const candidateKey = c.candidate_id || c.id;
 
                                 // Use scoresRef first, fallback to existing score
@@ -82,7 +90,7 @@ const ScoreAlertDialog = ({
                                         className="bg-neutral-800"
                                     >
                                         <td className="p-2 border-b border-gray-600">
-                                            {c.candidate_number}
+                                            {idx + 1}
                                         </td>
                                         <td className="p-2 border-b border-gray-600">
                                             <div className="flex items-center gap-2">

@@ -5,7 +5,7 @@ import PageLayout from "@/Layouts/PageLayout";
 import ResultTable from "./Partials/ResultTable";
 
 const CreativeAttiveResult = ({
-    categoryName = "Bangkera (Inspired) Creative Attire",
+    categoryName = "Bangkarera (Inspired) Creative Attire",
     candidates = [],
     judgeOrder = [],
 }) => {

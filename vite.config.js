@@ -10,4 +10,14 @@ export default defineConfig({
         }),
         react(),
     ],
+    /* server: {
+        host: "192.168.10.101", // Use your local network IP address
+        port: 5173, // Port for Vite server
+    }, */
 });
+
+//run this
+/* For Command:
+	Laravel: php artisan serve --host=192.168.10.101 --port=8000
+	Vite: npm run dev -- --host
+192.168.10.101 */

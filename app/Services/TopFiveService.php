@@ -94,46 +94,65 @@ class TopFiveService
 
     /**
      * Get total combined results
+     * Formula:
+     * 1. Cumulative (35 max) = Average of 4 performances scaled to 35
+     * 2. Beauty of Face (15 max) = Sum of judge scores scaled to 15
+     * 3. Beauty of Body (15 max) = Sum of judge scores scaled to 15
+     * 4. Posture & Carriage (10 max) = Sum of judge scores scaled to 10
+     * 5. Q&A (25 max) = Sum of judge scores scaled to 25
+     * Total = 100 points
      */
     public function getTotalResults(): array
     {
         $candidates = TopFiveCandidates::with('candidate')->get();
         $scores = TopFiveScore::with('judge')->get();
+        $judgeCount = 4; // Number of judges
 
         $processed = [];
 
         foreach ($candidates as $index => $item) {
-            $beautyOfFace = 0;
-            $beautyOfBody = 0;
-            $postureAndCarriage = 0;
-            $finalQA = 0;
+            $beautyOfFaceSum = 0;
+            $beautyOfBodySum = 0;
+            $postureAndCarriageSum = 0;
+            $finalQASum = 0;
 
             foreach ($scores->where('top_five_id', $item->id) as $score) {
-                $beautyOfFace += $score->top_five_beauty_of_face ?? 0;
-                $beautyOfBody += $score->top_five_beauty_of_body ?? 0;
-                $postureAndCarriage += $score->top_five_posture_and_carriage_confidence ?? 0;
-                $finalQA += $score->top_five_final_q_and_a ?? 0;
+                $beautyOfFaceSum += $score->top_five_beauty_of_face ?? 0;
+                $beautyOfBodySum += $score->top_five_beauty_of_body ?? 0;
+                $postureAndCarriageSum += $score->top_five_posture_and_carriage_confidence ?? 0;
+                $finalQASum += $score->top_five_final_q_and_a ?? 0;
             }
 
+            // Cumulative is already the average of 4 performances, scale to 35 max
             $accumulative = $item->accumulative ?? 0;
+            $cumulativeScaled = ($accumulative / 100) * 35;
+
+            // Scale each category to its max points
+            // Beauty of Face: scale from (judgeCount * 100) to 15
+            $beautyOfFaceScaled = ($beautyOfFaceSum / ($judgeCount * 100)) * 15;
+            
+            // Beauty of Body: scale from (judgeCount * 100) to 15
+            $beautyOfBodyScaled = ($beautyOfBodySum / ($judgeCount * 100)) * 15;
+            
+            // Posture & Carriage: scale from (judgeCount * 100) to 10
+            $postureAndCarriageScaled = ($postureAndCarriageSum / ($judgeCount * 100)) * 10;
+            
+            // Q&A: scale from (judgeCount * 100) to 25
+            $finalQAScaled = ($finalQASum / ($judgeCount * 100)) * 25;
+
+            $totalScore = $cumulativeScaled + $beautyOfFaceScaled + $beautyOfBodyScaled + 
+                         $postureAndCarriageScaled + $finalQAScaled;
 
             $processed[] = [
                 'candidate' => $item->candidate,
                 'scores' => [
-                    'accumulative' => round($accumulative, 2),
-                    'top_five_beauty_of_face' => round($beautyOfFace, 2),
-                    'top_five_beauty_of_body' => round($beautyOfBody, 2),
-                    'top_five_posture_and_carriage_confidence' => round($postureAndCarriage, 2),
-                    'top_five_final_q_and_a' => round($finalQA, 2),
+                    'accumulative' => round($cumulativeScaled, 2),
+                    'top_five_beauty_of_face' => round($beautyOfFaceScaled, 2),
+                    'top_five_beauty_of_body' => round($beautyOfBodyScaled, 2),
+                    'top_five_posture_and_carriage_confidence' => round($postureAndCarriageScaled, 2),
+                    'top_five_final_q_and_a' => round($finalQAScaled, 2),
                 ],
-                'total' => round(
-                    $accumulative +
-                        $beautyOfFace +
-                        $beautyOfBody +
-                        $postureAndCarriage +
-                        $finalQA,
-                    2
-                ),
+                'total' => round($totalScore, 2),
                 'rank' => 0,
                 'candidate_number' => $index + 1,
             ];
