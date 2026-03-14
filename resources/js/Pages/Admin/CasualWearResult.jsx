@@ -19,6 +19,8 @@ const CasualWearResult = ({
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category={`${categoryName} Results`}
+                pdfRoute={route('admin.casual_wear.pdf')}
+                maxPoints={100}
             />
         </PageLayout>
     );

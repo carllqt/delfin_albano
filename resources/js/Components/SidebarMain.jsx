@@ -18,7 +18,6 @@ import {
     Star,
     Sparkles,
     MessageCircleQuestion,
-    Heart,
     Trophy,
     Package,
     LogOut,
@@ -45,7 +44,7 @@ export default function SidebarMain({ children }) {
         user?.role === "admin"
             ? [
                   {
-                      label: "Bangkera (Inspired) Creative Attire",
+                      label: "Bangkarera (Inspired) Creative Attire",
                       icon: <Palette />,
                       route: "admin.creative_attire",
                   },
@@ -65,21 +64,6 @@ export default function SidebarMain({ children }) {
                       route: "admin.filipiniana_attire",
                   },
                   {
-                      label: "Beauty of Face / Aura",
-                      icon: <Heart />,
-                      route: "admin.top5_beauty_face",
-                  },
-                  {
-                      label: "Beauty of Body",
-                      icon: <Heart />,
-                      route: "admin.top5_beauty_body",
-                  },
-                  {
-                      label: "Posture & Carriage / Confidence",
-                      icon: <Heart />,
-                      route: "admin.top5_posture_confidence",
-                  },
-                  {
                       label: "Top Five Selection",
                       icon: <Trophy />,
                       route: "admin.top_five_selection",
@@ -87,7 +71,7 @@ export default function SidebarMain({ children }) {
               ]
             : [
                   {
-                      label: "Bangkera (Inspired) Creative Attire",
+                      label: "Bangkarera (Inspired) Creative Attire",
                       icon: <Palette />,
                       route: "creative_attire",
                   },
@@ -105,21 +89,6 @@ export default function SidebarMain({ children }) {
                       label: "Evening Long Gown",
                       icon: <Sparkles />,
                       route: "filipiniana_attire",
-                  },
-                  {
-                      label: "Beauty of Face / Aura",
-                      icon: <Heart />,
-                      route: "beauty_of_face_aura",
-                  },
-                  {
-                      label: "Beauty of Body",
-                      icon: <Heart />,
-                      route: "beauty_of_body",
-                  },
-                  {
-                      label: "Posture & Carriage / Confidence",
-                      icon: <Heart />,
-                      route: "posture_and_carriage_confidence",
                   },
               ];
 

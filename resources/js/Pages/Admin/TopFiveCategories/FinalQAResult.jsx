@@ -19,6 +19,9 @@ const FinalQAResult = ({
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category={`${categoryName} Results`}
+                pdfRoute={route('admin.final_q_and_a.pdf')}
+                maxPoints={25}
+                isAverageScore={true}
             />
         </PageLayout>
     );

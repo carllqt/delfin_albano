@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import { router, usePage } from "@inertiajs/react";
 import PageLayout from "@/Layouts/PageLayout";
-import CandidateGrid from "./Partials/CandidateGrid";
+import DirectScoreGrid from "./Partials/DirectScoreGrid";
 import ScoreAlertDialog from "./Partials/ScoreAlertDialog";
 import { toast } from "sonner";
 
@@ -70,7 +70,7 @@ const BeautyOfBody = ({ candidates }) => {
                     </h2>
                 </div>
 
-                <CandidateGrid
+                <DirectScoreGrid
                     candidates={candidates}
                     maxScore={15}
                     scoresRef={scoresRef}

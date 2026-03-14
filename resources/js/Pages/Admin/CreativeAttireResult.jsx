@@ -5,7 +5,7 @@ import PageLayout from "@/Layouts/PageLayout";
 import ResultTable from "./Partials/ResultTable";
 
 const CreativeAttiveResult = ({
-    categoryName = "Bangkera (Inspired) Creative Attire",
+    categoryName = "Bangkarera (Inspired) Creative Attire",
     candidates = [],
     judgeOrder = [],
 }) => {
@@ -19,6 +19,8 @@ const CreativeAttiveResult = ({
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category={`${categoryName} Results`}
+                pdfRoute={route('admin.creative_attire.pdf')}
+                maxPoints={100}
             />
         </PageLayout>
     );

@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/swim-wear', [CandidateController::class, 'swim_wear'])
         ->name('swim_wear');
 
-    Route::get('/filipiniana-attire', [CandidateController::class, 'filipiniana_attire'])
+    Route::get('/evening-long-gown', [CandidateController::class, 'filipiniana_attire'])
         ->name('filipiniana_attire');
 
     Route::get('/beauty-of-face-aura', [CandidateController::class, 'beauty_of_face_aura'])
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/swim-wear/scores', [TopFiveSelectionScoreController::class, 'swim_wear_store'])
         ->name('swim_wear.store');
 
-    Route::post('/filipiniana-attire/scores', [TopFiveSelectionScoreController::class, 'filipiniana_attire_store'])
+    Route::post('/evening-long-gown/scores', [TopFiveSelectionScoreController::class, 'filipiniana_attire_store'])
         ->name('filipiniana_attire.store');
 
     Route::post('/beauty-of-face-aura/scores', [TopFiveSelectionScoreController::class, 'beauty_of_face_aura_store'])
@@ -86,7 +86,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/swim-wear', [TopFiveSelectionResultController::class, 'swimWearResults'])
         ->name('admin.swim_wear');
 
-    Route::get('/admin/filipiniana-attire', [TopFiveSelectionResultController::class, 'filipinianaAttireResults'])
+    Route::get('/admin/evening-long-gown', [TopFiveSelectionResultController::class, 'filipinianaAttireResults'])
         ->name('admin.filipiniana_attire');
 
     Route::get('/admin/beauty-of-face-aura', [TopFiveSelectionResultController::class, 'beautyOfFaceAuraResults'])
@@ -145,6 +145,42 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/top-five', [TopFiveSelectionResultController::class, 'setTopFive'])
         ->name('topFive.set');
+});
+
+// PDF Export Routes - Top 5 Selection
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/creative-attire/pdf', [TopFiveSelectionResultController::class, 'exportCreativeAttirePdf'])
+        ->name('admin.creative_attire.pdf');
+    
+    Route::get('/admin/casual-wear/pdf', [TopFiveSelectionResultController::class, 'exportCasualWearPdf'])
+        ->name('admin.casual_wear.pdf');
+    
+    Route::get('/admin/swim-wear/pdf', [TopFiveSelectionResultController::class, 'exportSwimWearPdf'])
+        ->name('admin.swim_wear.pdf');
+    
+    Route::get('/admin/evening-long-gown/pdf', [TopFiveSelectionResultController::class, 'exportFilipinianaPdf'])
+        ->name('admin.filipiniana_attire.pdf');
+    
+    Route::get('/admin/top-five-selection/pdf', [TopFiveSelectionResultController::class, 'exportTopFiveSelectionPdf'])
+        ->name('admin.top_five_selection.pdf');
+});
+
+// PDF Export Routes - Top 5 Finalists
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/beauty-of-face/pdf', [TopFiveCandidateResultController::class, 'exportBeautyOfFacePdf'])
+        ->name('admin.beauty_of_face.pdf');
+    
+    Route::get('/admin/beauty-of-body/pdf', [TopFiveCandidateResultController::class, 'exportBeautyOfBodyPdf'])
+        ->name('admin.beauty_of_body_final.pdf');
+    
+    Route::get('/admin/posture-and-carriage-confidence/pdf', [TopFiveCandidateResultController::class, 'exportPostureAndCarriagePdf'])
+        ->name('admin.posture_and_carriage_confidence_final.pdf');
+    
+    Route::get('/admin/final-q-and-a/pdf', [TopFiveCandidateResultController::class, 'exportFinalQAPdf'])
+        ->name('admin.final_q_and_a.pdf');
+    
+    Route::get('/admin/total-results/pdf', [TopFiveCandidateResultController::class, 'exportTotalResultsPdf'])
+        ->name('admin.top_five_finalist.pdf');
 });
 
 // Admin Top 5 Candidates Result Routes

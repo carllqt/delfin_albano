@@ -38,7 +38,7 @@ const ScoreAlertDialog = ({
                 </HoverBorderGradient>
             </AlertDialogTrigger>
 
-            <AlertDialogContent className="sm:max-w-lg w-full max-h-[85vh] bg-neutral-900 text-white rounded-lg shadow-lg p-6">
+            <AlertDialogContent className="sm:max-w-lg max-h-[85vh] bg-neutral-900 text-white rounded-lg shadow-lg p-6 flex flex-col">
                 <AlertDialogHeader>
                     <AlertDialogTitle>Verify Scores</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -46,9 +46,9 @@ const ScoreAlertDialog = ({
                     </AlertDialogDescription>
                 </AlertDialogHeader>
 
-                <div className="mt-4 max-h-[50vh] overflow-y-auto rounded-md border border-gray-700">
-                    <table className="w-full text-left border-collapse">
-                        <thead className="bg-neutral-800 text-white sticky top-0 z-10">
+                <div className="mt-4 overflow-y-auto flex-1 max-h-[50vh]">
+                    <table className="w-full text-left border-collapse border border-gray-700">
+                        <thead className="bg-neutral-800 text-white">
                             <tr>
                                 <th className="p-2 border-b border-gray-600">
                                     #
@@ -62,10 +62,12 @@ const ScoreAlertDialog = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {candidates.map((c) => (
+                            {[...candidates]
+                                .sort((a, b) => (scoresRef.current[b.id] || 0) - (scoresRef.current[a.id] || 0))
+                                .map((c, idx) => (
                                 <tr key={c.id} className="bg-neutral-800">
                                     <td className="p-2 border-b border-gray-600">
-                                        {c.candidate_number}
+                                        {idx + 1}
                                     </td>
                                     <td className="p-2 border-b border-gray-600">
                                         <div className="flex items-center gap-2">

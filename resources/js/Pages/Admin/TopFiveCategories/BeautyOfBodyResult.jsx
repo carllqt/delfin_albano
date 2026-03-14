@@ -19,6 +19,9 @@ const BeautyOfBodyResult = ({
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category="beauty_of_body"
+                pdfRoute={route('admin.beauty_of_body_final.pdf')}
+                maxPoints={15}
+                isAverageScore={true}
             />
         </PageLayout>
     );

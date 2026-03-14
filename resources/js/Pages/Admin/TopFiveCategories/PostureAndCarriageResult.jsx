@@ -19,6 +19,9 @@ const PostureAndCarriageResult = ({
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category="posture_and_carriage_confidence"
+                pdfRoute={route('admin.posture_and_carriage_confidence_final.pdf')}
+                maxPoints={10}
+                isAverageScore={true}
             />
         </PageLayout>
     );

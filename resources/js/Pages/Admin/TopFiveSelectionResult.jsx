@@ -55,6 +55,7 @@ const TopFiveSelectionResult = ({
                 candidates={candidates}
                 categories={categories}
                 category={categoryName}
+                pdfRoute={route('admin.top_five_selection.pdf')}
             />
 
             <div className="flex justify-center mb-10">

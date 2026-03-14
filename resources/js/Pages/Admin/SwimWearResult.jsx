@@ -15,6 +15,8 @@ const SwimWearResult = ({ categoryName, candidates = [], judgeOrder = [] }) => {
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category={`${categoryName} Results`}
+                pdfRoute={route('admin.swim_wear.pdf')}
+                maxPoints={100}
             />
         </PageLayout>
     );

@@ -76,7 +76,7 @@ const BeautyOfBody = ({ candidates }) => {
                     scoresRef={scoresRef}
                     onScoreChange={handleScoreChange}
                     submitted={submitted}
-                    categoryField="beauty_of_body"
+                    categoryField="top_five_beauty_of_body"
                 />
 
                 <ScoreAlertDialog
