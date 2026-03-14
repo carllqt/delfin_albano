@@ -80,10 +80,14 @@ class TopFiveService
                 }
             }
 
+            // Calculate average instead of sum
+            $judgeScoresArray = array_values($candidateScores);
+            $average = count($judgeScoresArray) > 0 ? array_sum($judgeScoresArray) / count($judgeScoresArray) : 0;
+
             $processed[] = [
                 'candidate'        => $candidate,
                 'scores'           => $candidateScores,
-                'total'            => round(array_sum($candidateScores), 2),
+                'total'            => round($average, 2),
                 'rank'             => 0,
                 'candidate_number' => $index + 1,
             ];
@@ -96,17 +100,16 @@ class TopFiveService
      * Get total combined results
      * Formula:
      * 1. Cumulative (35 max) = Average of 4 performances scaled to 35
-     * 2. Beauty of Face (15 max) = Sum of judge scores scaled to 15
-     * 3. Beauty of Body (15 max) = Sum of judge scores scaled to 15
-     * 4. Posture & Carriage (10 max) = Sum of judge scores scaled to 10
-     * 5. Q&A (25 max) = Sum of judge scores scaled to 25
+     * 2. Beauty of Face (15 max) = Direct score from judges (already out of 15)
+     * 3. Beauty of Body (15 max) = Direct score from judges (already out of 15)
+     * 4. Posture & Carriage (10 max) = Direct score from judges (already out of 10)
+     * 5. Q&A (25 max) = Direct score from judges (already out of 25)
      * Total = 100 points
      */
     public function getTotalResults(): array
     {
         $candidates = TopFiveCandidates::with('candidate')->get();
         $scores = TopFiveScore::with('judge')->get();
-        $judgeCount = 4; // Number of judges
 
         $processed = [];
 
@@ -123,34 +126,37 @@ class TopFiveService
                 $finalQASum += $score->top_five_final_q_and_a ?? 0;
             }
 
+            $judgeCount = $scores->where('top_five_id', $item->id)->count();
+            $judgeCount = $judgeCount > 0 ? $judgeCount : 1; // Avoid division by zero
+
             // Cumulative is already the average of 4 performances, scale to 35 max
             $accumulative = $item->accumulative ?? 0;
             $cumulativeScaled = ($accumulative / 100) * 35;
 
-            // Scale each category to its max points
-            // Beauty of Face: scale from (judgeCount * 100) to 15
-            $beautyOfFaceScaled = ($beautyOfFaceSum / ($judgeCount * 100)) * 15;
+            // Average the judges' scores to get the final score for each category
+            // Beauty of Face: max 15 points
+            $beautyOfFaceTotal = round($beautyOfFaceSum / $judgeCount, 2);
             
-            // Beauty of Body: scale from (judgeCount * 100) to 15
-            $beautyOfBodyScaled = ($beautyOfBodySum / ($judgeCount * 100)) * 15;
+            // Beauty of Body: max 15 points
+            $beautyOfBodyTotal = round($beautyOfBodySum / $judgeCount, 2);
             
-            // Posture & Carriage: scale from (judgeCount * 100) to 10
-            $postureAndCarriageScaled = ($postureAndCarriageSum / ($judgeCount * 100)) * 10;
+            // Posture & Carriage: max 10 points
+            $postureAndCarriageTotal = round($postureAndCarriageSum / $judgeCount, 2);
             
-            // Q&A: scale from (judgeCount * 100) to 25
-            $finalQAScaled = ($finalQASum / ($judgeCount * 100)) * 25;
+            // Q&A: max 25 points
+            $finalQATotal = round($finalQASum / $judgeCount, 2);
 
-            $totalScore = $cumulativeScaled + $beautyOfFaceScaled + $beautyOfBodyScaled + 
-                         $postureAndCarriageScaled + $finalQAScaled;
+            $totalScore = $cumulativeScaled + $beautyOfFaceTotal + $beautyOfBodyTotal + 
+                         $postureAndCarriageTotal + $finalQATotal;
 
             $processed[] = [
                 'candidate' => $item->candidate,
                 'scores' => [
                     'accumulative' => round($cumulativeScaled, 2),
-                    'top_five_beauty_of_face' => round($beautyOfFaceScaled, 2),
-                    'top_five_beauty_of_body' => round($beautyOfBodyScaled, 2),
-                    'top_five_posture_and_carriage_confidence' => round($postureAndCarriageScaled, 2),
-                    'top_five_final_q_and_a' => round($finalQAScaled, 2),
+                    'top_five_beauty_of_face' => round($beautyOfFaceTotal, 2),
+                    'top_five_beauty_of_body' => round($beautyOfBodyTotal, 2),
+                    'top_five_posture_and_carriage_confidence' => round($postureAndCarriageTotal, 2),
+                    'top_five_final_q_and_a' => round($finalQATotal, 2),
                 ],
                 'total' => round($totalScore, 2),
                 'rank' => 0,

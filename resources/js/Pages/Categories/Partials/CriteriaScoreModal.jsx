@@ -130,18 +130,18 @@ const CriteriaScoreModal = ({
 
                     {/* Right Side - Scoring Form */}
                     <div className="flex-1 flex flex-col">
-                        <div className="flex-1 overflow-y-auto p-6">
+                        <div className="flex-1 p-6">
                             <h3 className="text-lg font-semibold text-gray-200 mb-4 flex items-center">
                                 <span className="w-1 h-6 bg-blue-500 mr-3 rounded"></span>
                                 Scoring Criteria
                             </h3>
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {criteria.map((criterion, index) => (
                                     <div
                                         key={index}
-                                        className="bg-neutral-800/50 p-4 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-colors"
+                                        className="bg-neutral-800/50 p-3 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-colors"
                                     >
-                                        <div className="flex justify-between items-start mb-3">
+                                        <div className="flex justify-between items-start mb-2">
                                             <label className="text-sm font-medium text-gray-100 flex-1 leading-relaxed">
                                                 <span className="inline-block w-6 h-6 bg-blue-600 text-white rounded-full text-center text-xs leading-6 mr-2">
                                                     {index + 1}
@@ -164,7 +164,7 @@ const CriteriaScoreModal = ({
                                             }}
                                             onFocus={(e) => e.stopPropagation()}
                                             onClick={(e) => e.stopPropagation()}
-                                            className="w-full px-4 py-3 bg-neutral-700 border-2 border-gray-600 rounded-lg text-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                            className="w-full px-4 py-2 bg-neutral-700 border-2 border-gray-600 rounded-lg text-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                             placeholder={`0 - ${criterion.maxPoints}`}
                                             autoComplete="off"
                                         />
@@ -189,7 +189,7 @@ const CriteriaScoreModal = ({
                                     className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
                                     onClick={handleSubmit}
                                 >
-                                    Save Score
+                                    Submit Score
                                 </button>
                             </div>
                         </div>

@@ -19,6 +19,8 @@ const FilipinianaAttireResult = ({
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category={`${categoryName} Results`}
+                pdfRoute={route('admin.filipiniana_attire.pdf')}
+                maxPoints={100}
             />
         </PageLayout>
     );

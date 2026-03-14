@@ -147,6 +147,42 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('topFive.set');
 });
 
+// PDF Export Routes - Top 5 Selection
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/creative-attire/pdf', [TopFiveSelectionResultController::class, 'exportCreativeAttirePdf'])
+        ->name('admin.creative_attire.pdf');
+    
+    Route::get('/admin/casual-wear/pdf', [TopFiveSelectionResultController::class, 'exportCasualWearPdf'])
+        ->name('admin.casual_wear.pdf');
+    
+    Route::get('/admin/swim-wear/pdf', [TopFiveSelectionResultController::class, 'exportSwimWearPdf'])
+        ->name('admin.swim_wear.pdf');
+    
+    Route::get('/admin/evening-long-gown/pdf', [TopFiveSelectionResultController::class, 'exportFilipinianaPdf'])
+        ->name('admin.filipiniana_attire.pdf');
+    
+    Route::get('/admin/top-five-selection/pdf', [TopFiveSelectionResultController::class, 'exportTopFiveSelectionPdf'])
+        ->name('admin.top_five_selection.pdf');
+});
+
+// PDF Export Routes - Top 5 Finalists
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/beauty-of-face/pdf', [TopFiveCandidateResultController::class, 'exportBeautyOfFacePdf'])
+        ->name('admin.beauty_of_face.pdf');
+    
+    Route::get('/admin/beauty-of-body/pdf', [TopFiveCandidateResultController::class, 'exportBeautyOfBodyPdf'])
+        ->name('admin.beauty_of_body_final.pdf');
+    
+    Route::get('/admin/posture-and-carriage-confidence/pdf', [TopFiveCandidateResultController::class, 'exportPostureAndCarriagePdf'])
+        ->name('admin.posture_and_carriage_confidence_final.pdf');
+    
+    Route::get('/admin/final-q-and-a/pdf', [TopFiveCandidateResultController::class, 'exportFinalQAPdf'])
+        ->name('admin.final_q_and_a.pdf');
+    
+    Route::get('/admin/total-results/pdf', [TopFiveCandidateResultController::class, 'exportTotalResultsPdf'])
+        ->name('admin.top_five_finalist.pdf');
+});
+
 // Admin Top 5 Candidates Result Routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get(

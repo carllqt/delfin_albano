@@ -21,6 +21,7 @@ const TotalResults = ({ categoryName = "Total Results", candidates = [] }) => {
                     "top_five_final_q_and_a",
                 ]}
                 category={`${categoryName} Results`}
+                pdfRoute={route('admin.top_five_finalist.pdf')}
             />
         </PageLayout>
     );

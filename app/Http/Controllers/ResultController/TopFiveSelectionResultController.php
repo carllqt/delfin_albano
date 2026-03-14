@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\TopFiveSelectionService;
 use App\Models\TopFiveCandidates;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TopFiveSelectionResultController extends Controller
 {
@@ -58,7 +59,7 @@ class TopFiveSelectionResultController extends Controller
     {
         return $this->renderCategory(
             'filipiniana_attire',
-            'Filipiniana Attire',
+            'Evening Long Gown',
             'Admin/FilipinianaAttireResult'
         );
     }
@@ -118,5 +119,64 @@ class TopFiveSelectionResultController extends Controller
             'success',
             'Top 5 candidates saved with accumulative scores successfully!'
         );
+    }
+
+    // PDF Export Methods
+    public function exportCategoryPdf(string $category, string $name)
+    {
+        $results = $this->service->getResultsPerCategory($category);
+        
+        $pdf = Pdf::loadView('pdf.result-table', [
+            'candidates' => $results['candidates'],
+            'judgeOrder' => $results['judgeOrder'],
+            'categoryName' => $name,
+            'maxPoints' => 100,
+            'isAverageScore' => false,
+        ]);
+        
+        $pdf->setPaper('A4', 'landscape');
+        
+        return $pdf->download($name . ' Results.pdf');
+    }
+
+    public function exportCreativeAttirePdf()
+    {
+        return $this->exportCategoryPdf('creative_attire', 'Bangkarera Creative Attire');
+    }
+
+    public function exportCasualWearPdf()
+    {
+        return $this->exportCategoryPdf('casual_wear', 'Casual Wear');
+    }
+
+    public function exportSwimWearPdf()
+    {
+        return $this->exportCategoryPdf('swim_wear', 'Swim Wear');
+    }
+
+    public function exportFilipinianaPdf()
+    {
+        return $this->exportCategoryPdf('filipiniana_attire', 'Evening Long Gown');
+    }
+
+    public function exportTopFiveSelectionPdf()
+    {
+        $results = $this->service->getTopFiveSelectionResults();
+        
+        $pdf = Pdf::loadView('pdf.top-five-selection-table', [
+            'candidates' => $results['candidates'],
+            'categories' => $results['categories'],
+            'categoryLabels' => [
+                'creative_attire' => 'Bangkarera Creative Attire',
+                'casual_wear' => 'Casual Wear',
+                'swim_wear' => 'Swim Wear',
+                'filipiniana_attire' => 'Evening Long Gown',
+            ],
+            'categoryName' => 'Top Five Selection',
+        ]);
+        
+        $pdf->setPaper('A4', 'landscape');
+        
+        return $pdf->download('Top Five Selection Results.pdf');
     }
 }

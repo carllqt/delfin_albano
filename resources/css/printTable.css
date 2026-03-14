@@ -29,3 +29,54 @@
     color: #000 !important;
     font-weight: bold !important;
 }
+
+/* Print styles - keep everything on one page */
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 8mm;
+    }
+    
+    body {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    /* Prevent page breaks inside table */
+    table {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    /* Keep signatures on same page */
+    .signature-section {
+        page-break-inside: avoid !important;
+        margin-top: 1rem !important;
+        padding: 2rem !important;
+    }
+    
+    .signature-section h3 {
+        font-size: 18px !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .signature-section .grid {
+        gap: 2rem !important;
+    }
+    
+    .signature-section p {
+        font-size: 14px !important;
+        margin-bottom: 3rem !important;
+    }
+    
+    /* Compact table for print */
+    table * {
+        font-size: 9pt !important;
+        padding: 2px 4px !important;
+    }
+    
+    table img {
+        width: 20px !important;
+        height: 20px !important;
+    }
+}

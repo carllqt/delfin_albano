@@ -19,6 +19,8 @@ const CreativeAttiveResult = ({
                 candidates={candidates}
                 judgeOrder={judgeOrder}
                 category={`${categoryName} Results`}
+                pdfRoute={route('admin.creative_attire.pdf')}
+                maxPoints={100}
             />
         </PageLayout>
     );

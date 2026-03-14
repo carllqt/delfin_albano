@@ -76,7 +76,7 @@ const PostureAndCarriageConfidence = ({ candidates }) => {
                     scoresRef={scoresRef}
                     onScoreChange={handleScoreChange}
                     submitted={submitted}
-                    categoryField="posture_and_carriage_confidence"
+                    categoryField="top_five_posture_and_carriage_confidence"
                 />
 
                 <ScoreAlertDialog

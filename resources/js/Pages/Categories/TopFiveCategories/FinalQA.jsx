@@ -75,7 +75,7 @@ const TopFiveFinalQA = ({ candidates }) => {
                     scoresRef={scoresRef}
                     onScoreChange={handleScoreChange}
                     submitted={submitted}
-                    categoryField="final_q_and_a"
+                    categoryField="top_five_final_q_and_a"
                 />
 
                 <ScoreAlertDialog

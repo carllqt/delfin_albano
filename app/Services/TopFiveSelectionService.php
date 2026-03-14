@@ -12,9 +12,6 @@ class TopFiveSelectionService
         'casual_wear',
         'swim_wear',
         'filipiniana_attire',
-        'beauty_of_face_aura',
-        'beauty_of_body',
-        'posture_and_carriage_confidence',
     ];
 
     protected array $judgeOrder = [
@@ -26,20 +23,17 @@ class TopFiveSelectionService
     ];
 
     protected array $weights = [
-        'creative_attire' => 20,
-        'casual_wear' => 10,
-        'swim_wear' => 10,
-        'filipiniana_attire' => 20,
+        'creative_attire' => 30,
+        'casual_wear' => 20,
+        'swim_wear' => 20,
+        'filipiniana_attire' => 30,
     ];
 
     protected array $categoryLabels = [
         'creative_attire' => 'Bangkarera Creative Attire',
         'casual_wear' => 'Casual Wear',
         'swim_wear' => 'Swim Wear',
-        'filipiniana_attire' => 'Filipiniana (Inspired) Attire',
-        'beauty_of_face_aura' => 'Beauty of Face / Aura',
-        'beauty_of_body' => 'Beauty of Body',
-        'posture_and_carriage_confidence' => 'Posture and Carriage / Confidence',
+        'filipiniana_attire' => 'Evening Long Gown',
     ];
 
     private function computeCategoryFinalScore(string $category, $mean): float
@@ -54,28 +48,30 @@ class TopFiveSelectionService
     }
 
     /**
-     * Compute cumulative performance score out of 35
-     * Based on:
-     * Creative Attire (20)
-     * Casual Wear (10)
-     * Swim Wear (10)
-     * Filipiniana Attire (20)
-     *
-     * Total possible = 60
-     * Convert to 35 points
+     * Compute cumulative performance score
+     * Based on Top 5 Selection total (out of 100)
+     * Creative Attire (30) + Casual Wear (20) + Swim Wear (20) + Evening Long Gown (30) = 100
+     * 
+     * The accumulative is stored as the full total (out of 100)
+     * It will be scaled to 35 points in the Final Ranking calculation
+     * 
+     * Returns array with both total and accumulative (same value, out of 100)
      */
-
-    private function computePerformanceCumulative(array $means): float
+    private function computePerformanceCumulative(array $means): array
     {
-        $sum =
+        $total =
             ($means['creative_attire'] ?? 0) +
             ($means['casual_wear'] ?? 0) +
             ($means['swim_wear'] ?? 0) +
             ($means['filipiniana_attire'] ?? 0);
 
-        $mean = $sum / 5;
+        // Accumulative is the same as total (out of 100)
+        $accumulative = round($total, 2);
 
-        return round($mean * 0.35, 2);
+        return [
+            'total' => round($total, 2),
+            'accumulative' => $accumulative,
+        ];
     }
 
     public function getResultsPerCategory(string $category): array
@@ -137,12 +133,13 @@ class TopFiveSelectionService
                 $categoryTotals[$cat] = $this->computeCategoryFinalScore($cat, $mean);
             }
 
-            $performanceCumulative = $this->computePerformanceCumulative($categoryTotals);
+            $cumulativeData = $this->computePerformanceCumulative($categoryTotals);
 
             $processed[] = [
                 'candidate' => $candidate,
                 'scores' => $categoryTotals,
-                'performance_cumulative' => $performanceCumulative,
+                'performance_cumulative' => $cumulativeData['accumulative'],
+                'selection_total' => $cumulativeData['total'],
                 'total' => round(array_sum($categoryTotals), 2),
                 'rank' => 0,
             ];
@@ -215,6 +212,7 @@ class TopFiveSelectionService
                 return [
                     'candidate' => $item['candidate'],
                     'total' => $item['total'],
+                    'selection_total' => $item['selection_total'],
                     'accumulative' => $item['performance_cumulative'],
                 ];
             })
