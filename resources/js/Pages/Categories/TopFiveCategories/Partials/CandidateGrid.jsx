@@ -31,8 +31,6 @@ const CandidateGrid = ({
                     candidate[categoryField] ?? // <-- this shows existing score
                     "";
 
-                const hasScore = currentScore !== "" && currentScore !== null && currentScore !== undefined;
-
                 const handleScoreChange = (val) => {
                     onScoreChange(candidateKey, val);
                 };
@@ -40,9 +38,7 @@ const CandidateGrid = ({
                 return (
                     <div
                         key={candidateKey}
-                        className={`bg-neutral-900 border rounded-xl p-4 shadow-[0_4px_15px_rgba(255,255,255,0.3)] hover:shadow-[0_6px_25px_rgba(255,255,255,0.5)] transition-shadow duration-300 flex flex-col items-center gap-3 overflow-hidden ${
-                            hasScore ? "border-green-500 ring-2 ring-green-500" : "border-white/20"
-                        }`}
+                        className="bg-neutral-900 border border-white/20 rounded-xl p-4 shadow-[0_4px_15px_rgba(255,255,255,0.3)] hover:shadow-[0_6px_25px_rgba(255,255,255,0.5)] transition-shadow duration-300 flex flex-col items-center gap-3 overflow-hidden"
                     >
                         <img
                             src={imageSrc || defaultImage}
@@ -63,8 +59,12 @@ const CandidateGrid = ({
                             value={currentScore}
                             onChange={handleScoreChange}
                             max={maxScore}
-                            // Disable if submitted OR if there's already a score from backend
-                            disabled={submitted || hasScore}
+                            // Disable only if submitted OR this category already has a score
+                            disabled={
+                                submitted ||
+                                candidate.has_existing_score?.[categoryField] !=
+                                    null
+                            }
                         />
                     </div>
                 );
